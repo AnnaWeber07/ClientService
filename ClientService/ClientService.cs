@@ -11,10 +11,12 @@ namespace ClientService
     {
         //background client service
 
+        Requester requester;
+
         private readonly List<Client> _clients = new();
         private readonly List<Order> _clientOrders = new();
 
-        public List<Menu> ComposedMenus;
+        public List<GetMenu> GetMenuPayload;
 
         private object _clientLocker = new object();
 
@@ -29,14 +31,13 @@ namespace ClientService
             }
         }
 
-        public void GenerateMenus(Menu menu)
+        public void GenerateMenus()
         {
-            if (!ComposedMenus.Contains(menu))
-                ComposedMenus.Add(menu);
+            GetMenu jsonMenu = new();
+            requester.GetMenuAsync().GetAwaiter();
+            GetMenuPayload.Add(jsonMenu);
         }
 
-        //TODO: generate order
-        //TODO: 
 
         private void GenerateClients(int quantity)
         {
@@ -48,23 +49,10 @@ namespace ClientService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //GenerateMenus();
+            GenerateMenus();
             GenerateClients(5);
             return Task.CompletedTask;
         }
-
-        public void ServeOrder(Order order)
-        {
-            
-            if (order.IsReady == true)
-            {
-                
-                LogsWriter.Log($"The order is ready and transported to the client");
-            }
-        }
-
-
-
 
         internal void RequestOrder()
         {
