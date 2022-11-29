@@ -17,7 +17,6 @@ namespace ClientService
 
     public class Client : IDisposable
     {
-
         private static readonly ObjectIDGenerator iDGenerator = new();
         private readonly Thread _clientsThread;
 
@@ -53,18 +52,21 @@ namespace ClientService
                     {
                         //generate order and send it
                         var ordersList = GenerateOrders();
-                        requester.PostOrder(Id, ordersList);
+                        requester.PostOrderAsync(Id, ordersList);
 
                         //order.GenerateOrders();
-                        LogsWriter.Log($"Client number {Id} generated the order {}");
+                        LogsWriter.Log($"Client number {Id} generated the order");
 
                         state = ClientState.Waiting;
                     }
 
                     else if (state == ClientState.Waiting)
                     {
-                        //receive the order data from food ordering system
+                        GetOrderById();
 
+                        //if isready, then delete the order and 
+                        
+                        if ()
                     }
 
                     else if (state == ClientState.Done)
@@ -92,7 +94,7 @@ namespace ClientService
 
             for (int i = 0; i < quantity; i++)
             {
-                var nMenu = clientService.ComposedMenus.Find(x => x.RestaurantId == randomRest);
+                var nMenu = clientService.GetMenuPayload.Find(x => x.RestaurantId == randomRest);
                 var dishId = random.Next(nMenu.MenuValues.Count);
 
                 //todo: randomizer
