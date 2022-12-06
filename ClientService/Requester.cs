@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
@@ -20,16 +21,16 @@ namespace ClientService
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    
-                    var jsonMenu = await client.GetFromJsonAsync<GetMenu>($"http://localhost:8084/");
+                    GetMenu getMenu = null;
+                    getMenu = await client.GetFromJsonAsync<GetMenu>($"http://localhost:8084/");
 
-                    return jsonMenu;
+                    return getMenu;
                 }
             }
 
             catch (Exception e)
             {
-                LogsWriter.Log("Smth went wrong" + e);
+                LogsWriter.Log("Smth went wrong with menu" + e);
                 return null;
             }
 
@@ -49,8 +50,6 @@ namespace ClientService
                 new StringContent(content, Encoding.UTF8, mediaType));
             //по этому порту 8084 принимаю ответ от доставки
 
-            //получить объект из ответа
-
             var textresponse = await postResponse.Content.ReadFromJsonAsync<PostOrderResponse>();
 
 
@@ -69,10 +68,44 @@ namespace ClientService
             return null;
         }
 
-        public async Task<Order> GetOrderByIDAsync()
+        public async Task<GetOrderById> GetOrderByIDAsync(string path, long id)
         {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    GetOrderById getOrderById = null;
+                    //var order = await client.GetFromJsonAsync<GetOrderById>(client.BaseAddress); //todo: restaurant order id
+                    HttpResponseMessage response = await client.GetAsync(path + "/" + $"{id}");
 
+                    if (response.IsSuccessStatusCode)
+                    {
+                        LogsWriter.Log($"The order was successfully requested by ID {id}");
+                        var textResponse = await response.Content.ReadFromJsonAsync<GetOrderById>();
+                        return textResponse;
+                    }
+
+                    else
+                    {
+                        LogsWriter.Log($"The order wasn't successfully requested by ID {id}");
+                        return null;
+                    }
+                }
+            }
+
+            catch (Exception e)
+            {
+                LogsWriter.Log("Smth went wrong with getting the order by its id" + e);
+                return null;
+            }
+
+            return null;
         }
 
+
+        public async Task StartRequester(ClientService clientService)
+        {
+            GetMenuAsync();
+        }
     }
 }

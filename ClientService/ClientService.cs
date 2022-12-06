@@ -11,10 +11,15 @@ namespace ClientService
     {
         //background client service
 
-        Requester requester;
+        ClientServiceServer serviceServer;
+        //Requester requester;
 
         private readonly List<Client> _clients = new();
         private readonly List<Order> _clientOrders = new();
+        private List<PostOrderResponse> postOrderResponses = new();
+        private List<PostOrderRequest> postOrderRequests = new();
+        private List<GetOrderById> getOrderByIds = new();
+
 
         public List<GetMenu> GetMenuPayload;
 
@@ -34,7 +39,7 @@ namespace ClientService
         public void GenerateMenus()
         {
             GetMenu jsonMenu = new();
-            requester.GetMenuAsync().GetAwaiter();
+            serviceServer.requester.GetMenuAsync().GetAwaiter();
             GetMenuPayload.Add(jsonMenu);
         }
 
@@ -54,9 +59,11 @@ namespace ClientService
             return Task.CompletedTask;
         }
 
-        internal void RequestOrder()
+
+        public ClientService(ClientServiceServer clientServiceServer)
         {
-            //request an order from food service
+            this.serviceServer = clientServiceServer;
+            this.serviceServer.StartService();
         }
     }
 }

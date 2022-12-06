@@ -24,6 +24,9 @@ namespace ClientService
         public ClientState state;
         public Requester requester;
 
+        //post order response thread?
+
+
         public ClientService clientService { get; private set; }
 
 
@@ -52,21 +55,22 @@ namespace ClientService
                     {
                         //generate order and send it
                         var ordersList = GenerateOrders();
-                        requester.PostOrderAsync(Id, ordersList);
+                        var x = requester.PostOrderAsync(Id, ordersList);
 
                         //order.GenerateOrders();
                         LogsWriter.Log($"Client number {Id} generated the order");
+
+                        //response?
 
                         state = ClientState.Waiting;
                     }
 
                     else if (state == ClientState.Waiting)
                     {
-                        GetOrderById();
+                       // GetOrderById getOrderById = requester.GetOrderByIDAsync()
 
                         //if isready, then delete the order and 
-                        
-                        if ()
+
                     }
 
                     else if (state == ClientState.Done)
@@ -92,10 +96,13 @@ namespace ClientService
 
             var randomRest = random.Next(1, 4); //restaurant id
 
+
             for (int i = 0; i < quantity; i++)
             {
-                var nMenu = clientService.GetMenuPayload.Find(x => x.RestaurantId == randomRest);
-                var dishId = random.Next(nMenu.MenuValues.Count);
+                //var nMenu = clientService.GetMenuPayload.Find(x => x.RestaurantId == randomRest);
+                //var dishId = random.Next(nMenu.MenuValues.Count);
+
+
 
                 //todo: randomizer
             }

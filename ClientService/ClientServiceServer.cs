@@ -17,6 +17,13 @@ namespace ClientService
     {
         ClientService clientService;
 
+        public Requester requester = new();
+
+
+        public async Task StartService()
+        {
+            await requester.StartRequester(clientService);
+        }
 
         //TODO: include requester
 
