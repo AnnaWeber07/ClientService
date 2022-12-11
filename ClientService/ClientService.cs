@@ -21,7 +21,7 @@ namespace ClientService
         private List<GetOrderById> getOrderByIds = new();
 
 
-        public List<GetMenu> GetMenuPayload;
+        public List<GetMenu> GetMenuPayload = new();
 
         private object _clientLocker = new object();
 

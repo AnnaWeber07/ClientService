@@ -22,7 +22,8 @@ namespace ClientService
 
         public long Id { get; private set; }
         public ClientState state;
-        public Requester requester;
+        public ClientService ClientService;
+        public Requester requester = new();
 
         //post order response thread?
 
@@ -67,7 +68,8 @@ namespace ClientService
 
                     else if (state == ClientState.Waiting)
                     {
-                       // GetOrderById getOrderById = requester.GetOrderByIDAsync()
+                       // string path = clientService.GetMenuPayload.Where(x => );
+                        //GetOrderById getOrderById = requester.GetOrderByIDAsync(path, id);
 
                         //if isready, then delete the order and 
 

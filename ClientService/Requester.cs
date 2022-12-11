@@ -21,10 +21,16 @@ namespace ClientService
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    GetMenu getMenu = null;
-                    getMenu = await client.GetFromJsonAsync<GetMenu>($"http://localhost:8084/");
 
-                    return getMenu;
+                    var menuRequest = new GetMenu();
+                    var content = JsonSerializer.Serialize(menuRequest);
+
+                    string mediaType = "application/json";
+
+                    var postResponse = await client.GetFromJsonAsync<GetMenu>("http://localhost:8085/");
+                    //getmenu  = await client.GetFromJsonAsync<GetMenu>($"http://localhost:8085/");
+
+                    return postResponse;
                 }
             }
 
@@ -35,7 +41,7 @@ namespace ClientService
             }
 
             return null;
-        }
+        } 
 
         public async Task<PostOrderResponse> PostOrderAsync(long clientId, List<Order> orders)
         {
@@ -46,7 +52,7 @@ namespace ClientService
             var content = JsonSerializer.Serialize(orderRequest);
             string mediaType = "application/json";
 
-            var postResponse = await httpClient.PostAsJsonAsync("http://localhost:8084/" + "ready",
+            var postResponse = await httpClient.PostAsJsonAsync("http://localhost:8085/" + "ready",
                 new StringContent(content, Encoding.UTF8, mediaType));
             //по этому порту 8084 принимаю ответ от доставки
 
@@ -105,7 +111,9 @@ namespace ClientService
 
         public async Task StartRequester(ClientService clientService)
         {
-            GetMenuAsync();
+            await GetMenuAsync();
+            GetMenuAsync().Wait();
+
         }
     }
 }
