@@ -11,5 +11,10 @@ namespace ClientService
         public int NumberOfRestaurants { get; set; }
         public List<RestaurantData> datas { get; set; }
 
+        public GetMenu()
+        {
+                
+        }
+
     }
 }
